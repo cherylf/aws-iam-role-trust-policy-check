@@ -55,6 +55,5 @@ def lambda_handler(event, context):
             for principal in servicePrincipals:
                 # group() returns the whole match pattern
                 service = re.search(find, principal).group()
-                print('service is ' + service) 
                 if service not in expected_servicePrincipals:
                     iam_client.put_role_permissions_boundary(RoleName=role_name, PermissionsBoundary=Pb_policy)
