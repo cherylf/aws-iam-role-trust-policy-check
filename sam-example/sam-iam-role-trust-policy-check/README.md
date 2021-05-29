@@ -25,6 +25,7 @@ sam init --location https://github.com/cherylf/aws-iam-role-trust-policy-check
 To build and deploy your application for the first time, run the following in your terminal:
 
 ```bash
+cd sam-example/sam-iam-role-trust-policy-check
 sam build --use-container
 sam deploy --guided
 ```
