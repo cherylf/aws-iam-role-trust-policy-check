@@ -1,0 +1,51 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Globals:
+  Function:
+    Timeout: 30
+Resources:
+  CheckRoleTrustPolicyFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: CheckRoleTrustPolicyFunction
+      Handler: lambda_function.lambda_handler
+      Runtime: python3.7
+      Events:
+        EventRule:
+          Type: EventBridgeRule
+          Properties:
+            Pattern:
+              source:
+              - aws.iam
+              detail-type:
+              - AWS API Call via CloudTrail
+              detail:
+                eventSource:
+                - iam.amazonaws.com
+                eventName:
+                - CreateRole
+                - UpdateAssumeRolePolicy
+                - DeleteRolePermissionsBoundary
+      Policies:
+      - AWSLambdaBasicExecutionRole
+      - Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Action:
+          - iam:PutRolePermissionsBoundary
+          - iam:Get*
+          - iam:List*
+          Resource: '*'
+Outputs:
+  CheckRoleTrustPolicyFunction:
+    Description: ARN of the Lambda function checking IAM role's trust policy
+    Value:
+      Fn::GetAtt:
+      - CheckRoleTrustPolicyFunction
+      - Arn
+  CheckRoleTrustPolicyFunctionIamRole:
+    Description: ARN of the IAM role attached to the Lambda function
+    Value:
+      Fn::GetAtt:
+      - CheckRoleTrustPolicyFunctionRole
+      - Arn

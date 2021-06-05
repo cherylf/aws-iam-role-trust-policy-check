@@ -1,0 +1,51 @@
+{
+    "version":"0",
+    "id":"fd1ef95c-xxxx-xxxx-xxxx-0183cfa86cab",
+    "detail-type":"AWS API Call via CloudTrail",
+    "source":"aws.iam",
+    "account":"123456789012",
+    "time":"2021-05-28T15:22:13Z",
+    "region":"us-east-1",
+    "resources":[
+       
+    ],
+    "detail":{
+       "eventVersion":"1.08",
+       "userIdentity":{
+          "type":"IAMUser",
+          "principalId":"AIDAXXXXXXXXXXXXXXXXX",
+          "arn":"arn:aws:iam::123456789012:user/cloud_user",
+          "accountId":"123456789012",
+          "accessKeyId":"ASIAXXXXXXXXXXXXXXXX",
+          "userName":"cloud_user",
+          "sessionContext":{
+             "sessionIssuer":{
+                
+             },
+             "webIdFederationData":{
+                
+             },
+             "attributes":{
+                "mfaAuthenticated":"true",
+                "creationDate":"2021-05-28T11:44:41Z"
+             }
+          }
+       },
+       "eventTime":"2021-05-28T15:22:13Z",
+       "eventSource":"iam.amazonaws.com",
+       "eventName":"DeleteRolePermissionsBoundary",
+       "awsRegion":"us-east-1",
+       "sourceIPAddress":"10.0.0.2",
+       "userAgent":"console.amazonaws.com",
+       "requestParameters":{
+          "roleName":"test-role"
+       },
+       "responseElements":"None",
+       "requestID":"f4bede06-xxxx-xxxx-xxxx-c937bd55f673",
+       "eventID":"9c157d5c-xxxx-xxxx-xxxx-1f76728b439f",
+       "readOnly":false,
+       "eventType":"AwsApiCall",
+       "managementEvent":true,
+       "eventCategory":"Management"
+    }
+ }
