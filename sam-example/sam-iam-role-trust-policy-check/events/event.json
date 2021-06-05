@@ -38,7 +38,7 @@
        "sourceIPAddress":"10.0.0.2",
        "userAgent":"console.amazonaws.com",
        "requestParameters":{
-          "roleName":"ServiceCatalogEndusers"
+          "roleName":"test-role"
        },
        "responseElements":"None",
        "requestID":"f4bede06-xxxx-xxxx-xxxx-c937bd55f673",

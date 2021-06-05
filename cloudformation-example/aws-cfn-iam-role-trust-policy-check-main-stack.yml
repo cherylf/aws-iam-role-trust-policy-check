@@ -1,0 +1,65 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  This is the main stack that will call and create other stacks
+  needed for the IAM Role Trust Policy Check solution
+Parameters:
+  LambdaRoleName:
+    Type: String
+    MinLength: '1'
+    ConstraintDescription: This parameter is required
+  LambdaFunctionName:
+    Type: String
+    MinLength: '1'
+    ConstraintDescription: This parameter is required
+  S3BucketName:
+    Type: String
+    Description: Name of the bucket where you stored Lambda function code
+    MinLength: '1'
+    ConstraintDescription: This parameter is required
+  S3Key:
+    Type: String
+    Description: S3 key example - lambda-deployment-package.zip or folderName/lambda-deployment-package.zip
+    MinLength: '1'
+    ConstraintDescription: This parameter is required
+  EventbridgeRuleName:
+    Type: String
+    MinLength: '1'
+    ConstraintDescription: This parameter is required
+Resources:
+  LambdaFunction:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub 'https://${S3BucketName}.s3.amazonaws.com/aws-cfn-iam-role-trust-policy-check-function.yml'
+      Parameters:
+        LambdaRoleName: !Ref LambdaRoleName
+        LambdaFunctionName: !Ref LambdaFunctionName
+        S3BucketName: !Ref S3BucketName
+        S3Key: !Ref S3Key
+  EventbridgeRule:
+    Type: AWS::Events::Rule
+    DependsOn: 'LambdaFunction'
+    Properties:
+      EventPattern:
+        source:
+          - 'aws.iam'
+        detail-type:
+          - 'AWS API Call via CloudTrail'
+        detail:
+          eventSource:
+            - iam.amazonaws.com
+          eventName:
+            - CreateRole
+            - UpdateAssumeRolePolicy
+            - DeleteRolePermissionsBoundary
+      Name: !Ref EventbridgeRuleName
+      State: 'ENABLED'
+      Targets: 
+        - Arn: !GetAtt LambdaFunction.Outputs.LambdaFunctionArn
+          Id: !Ref LambdaFunctionName
+  PermissionsForEventbridgeToInvokeLambda:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref LambdaFunctionName
+      Action: 'lambda:InvokeFunction'
+      Principal: 'events.amazonaws.com'
+      SourceArn: !GetAtt EventbridgeRule.Arn
