@@ -1,4 +1,4 @@
-# aws-iam-role-trust-policy-check
+# AWS IAM Role Trust Policy Check
 
 ## Architecture
 
